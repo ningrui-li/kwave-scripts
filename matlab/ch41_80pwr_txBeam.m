@@ -62,7 +62,7 @@ Ny = 2048 - 2*PML_Y_SIZE;    % [grid points]
 Nz = 512 - 2*PML_Z_SIZE;     % [grid points]
 
 % set desired grid size in the x-direction (not including the PML)
-x = 52e-3;                  % [m]
+x = 59e-3;                  % [m]
 
 % calculate the spacing between the grid points
 dx = x/Nx;                  % [m]
@@ -107,12 +107,16 @@ input_signal = (source_strength./(medium.sound_speed*medium.density)).*input_sig
 % =========================================================================
 % DEFINE THE ULTRASOUND TRANSDUCER
 % =========================================================================
+% physical properties of transducer (in m)
+element_width = 0.470e-3;
+element_length = 14e-3;
+kerf_width = 0.007e-3;
 
-% physical properties of the transducer
+% physical properties of the transducer (in grid points)
 transducer.number_elements = 64;    % total number of transducer elements
-transducer.element_width = 16;       % width of each element [grid points]
-transducer.element_length = 478;     % length of each element [grid points]
-transducer.element_spacing = 0;     % spacing (kerf width) between the elements [grid points]
+transducer.element_width = round(element_width/dx)    % width of each element 
+transducer.element_length = round(element_length/dx)  % length of each element
+transducer.element_spacing = round(kerf_width/dx)     % spacing (kerf width) between the elements
 transducer.radius = inf;            % radius of curvature of the transducer [m]
 
 % calculate the width of the transducer in grid points
@@ -175,7 +179,7 @@ switch MASK_PLANE
 
     case 'onaxis'
         sensor.mask(:, Ny/2, Nz/2) = 1;
-
+    
     case 'vol'
         sensor.mask(:, (1/4)*Ny:(3/4)*Ny, :) = 1;
 end 
