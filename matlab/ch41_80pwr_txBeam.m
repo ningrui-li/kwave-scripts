@@ -94,7 +94,7 @@ kgrid.t_array = makeTime(kgrid, medium.sound_speed);
 
 % define properties of the input signal
 source_strength = 0.4e6;        % [Pa]
-tone_burst_freq = 2.36e6;    	% [Hz]
+tone_burst_freq = 2.5e6;    	% [Hz]
 tone_burst_cycles = 7;
 
 % create the input signal using toneBurst 
