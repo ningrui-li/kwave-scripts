@@ -181,8 +181,21 @@ switch MASK_PLANE
         sensor.mask(:, Ny/2, Nz/2) = 1;
     
     case 'vol'
-        sensor.mask(:, (1/4)*Ny:(3/4)*Ny, :) = 1;
+        % only look at axial positions +/- 5 mm from the focal depth
+        axial_bound = 5e-3; % mm
+        axial_indices = round(Nx*((transducer.focus_distance-axial_bound)/x)):...
+                        round(Nx*((transducer.focus_distance+axial_bound)/x));
+                        
+        % only look at middle 25% of lateral position data.
+        lat_indices = round((3/8)*Ny):round((5/8)*Ny);
+        
+        % look at middle 50% of elevational position data.
+        ele_indices = round(Nz/4):round(3*Nz/4);
+        sensor.mask(axial_indices, lat_indices, ele_indices) = 1;
+    
+    % add quarter symmetric case here
 end 
+
 
 % set the record mode such that only the rms and peak values are stored
 if USE_STATISTICS
